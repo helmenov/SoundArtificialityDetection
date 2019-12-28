@@ -1,0 +1,63 @@
+\documentclass[a4paper,uplatex,12pt]{jsarticle}
+\usepackage[dvipdfmx]{graphicx}
+\usepackage{pdfoverlay}
+\usepackage{ruby,ulem,fancybox}
+\pagestyle{empty}
+
+
+\pdfoverlaySetPDF{ken1.pdf}
+
+\renewcommand{\baselinestretch}{1.4}
+
+\begin{document}
+	\vspace*{-1.6zh}
+	\hspace{-3zw}年\hspace{2zw} 月\hspace{2zw} 日 \hspace{3zw} 番
+    
+    \begin{minipage}[t]{0.4\textwidth}
+    \vspace*{0.1zh}\hspace*{-5zw}
+    研究会名
+    \end{minipage}
+    \begin{minipage}[t]{0.6\textwidth}
+    \begin{description}
+    	\item[姓名] 所属
+    	\item[姓名] 所属
+    	\item[姓名] 所属
+    	\item[姓名] 所属 
+    \end{description}	
+    \end{minipage}
+    
+    %発表題目
+    \vspace{5zh}
+    研究題目
+    
+    \vspace{1.5zh}
+    \parindent = 6zw
+    	
+    %登壇者
+    \ruby{登壇者}{{\tiny ふりがな}}
+    
+    %生年月日
+    \hspace{2zw} 年\hspace{3.3zw} 月\hspace{3.3zw} 日\hspace{6zw} \sout{\phantom{学生}}~\Ovalbox{\phantom{一般}}
+    
+    %学歴
+    学歴
+    
+    %学位
+    学位
+    
+    %現在の所属
+    現在の所属
+    
+    %役職名
+    役職名
+    
+    %表彰
+    表彰
+    
+    %主な著書
+    主な著書
+    
+    %研究歴
+    研究歴
+    		
+\end{document}
