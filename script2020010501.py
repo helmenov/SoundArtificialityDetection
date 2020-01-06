@@ -47,5 +47,5 @@ for i, p in enumerate(wavname, 0):
     ax2.set_xlabel("Time [s]")
     
     plt.show()
-    fig.savefig(labelname[i]+'.pdf', bbox_inches="tight", pad_inches=0.05)
+    fig.savefig(labelname[i]+'.png', bbox_inches="tight", pad_inches=0.05)
     
