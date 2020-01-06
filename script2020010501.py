@@ -18,7 +18,7 @@ window_size = 1024
 frame_size = 8192
 shift = 128
 
-labelname = ["#live", "#env", "#concat", "#mix", "#pops", "#jazz"]
+labelname = ["live", "env", "concat", "mix", "pops", "jazz"]
 wavname = ["01live.wav", "02eki.wav", "03concat.wav", "04mix.wav", "05pops.wav", "06jazz.wav"]
 
 for i, p in enumerate(wavname, 0): 
@@ -28,7 +28,7 @@ for i, p in enumerate(wavname, 0):
     len_x = len(x)
     CrossCep, CrossCep_ref, ref_Cep = liveness_sensor.liveness_sensor(wavname_path,window_size,frame_size,shift)
 
-    fig = plt.figure(figsize=(10,10),dpi=300)
+    fig = plt.figure(figsize=(10,10),dpi=60)
     fig.subplots_adjust(hspace=0.5)
     
     # fig(a) time-series
