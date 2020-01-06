@@ -29,13 +29,14 @@
 近年，音の模擬合成手法の発展により，人工的な模擬合成音は，現実の録音そのものであると聴覚的に認識されてもおかしくないほどとなりつつある．しかし，聴覚的には自然に感覚されても，現実の録音ではあり得ない波形に合成される場合もある．楽曲制作で一般的に用いられるマルチトラックレコーディングとミキシング過程では，異なる環境で収録された複数の音源を別の統一された環境下に配置合成される．既報では音源の再配置における位相パンニング処理の有無の検出手法について検討をおこない，左右チャネル間群遅延差の標準偏差が極端に低い場合に位相パンニング処理があったことを疑われることを示した．今回の報告ではマルチトラックミキシングを考慮した手法を検討する．
 \end{jabstract}
 \begin{jkeyword}
-%和文キーワード
+非現実的ミックス,　なりすまし検知, ライブネス検知, ケプストラム
 \end{jkeyword}
 \begin{eabstract}
 %英文アブストラクト
+In recent years, due to the development of simulated sound synthesis techniques, artificial simulated sounds have become to be perceived as real actual recordings by human auditory. However, even if the artificial sound is perceived as natural or real by human auditory system, the waveform of sound may be synthesized as that cannot be recorded in a real recording. In practical music production, the multi-track recording and mixing process are commonly used and the multiple sound sources recorded in different environments are arranged and synthesized under another unified environment by the digital audio workstation. In the previous report, we have proposed the detection method of the presence or absence of the phase panning process in the given directional sound source, and showed that the phase panning process was suspected when the standard deviation of the group delay difference between the left and right channels (Inter-channel Group-Delay difference) was extremely low. In this report, we consider a method considering multi-track mixing.
 \end{eabstract}
 \begin{ekeyword}
-%英文キーワード
+Unreal mixing, Spoofing detection, Liveness detection, Cepstrum
 \end{ekeyword}
 \maketitle
 
@@ -114,43 +115,43 @@ $\mathcal{C}_{\o}(n)$がある閾値$\mathcal{c}_{\o}$を下回るとき，フ�
 
 \section{評価実験}
 
-評価音源として，新たにスタジオ録音したギター演奏\#live，騒音データベース\ref{Souon}から\#env，時間方向に\#liveと\#envを連結した\#concat, \#envの音源の途中に\#liveを加算した\#mix, RWC研究者用音楽データベース\ref{RWC}からポピュラー音楽\#pops，ジャズ音楽\#jazz，を用意した．いずれも1チャネル音源とし，フレーム内で量子化振幅値がすべて0となる区間は現れないものとする．
+評価音源として，新たにスタジオ録音したギター演奏\#live，騒音データベース\ref{souon}から\#env，時間方向に\#liveと\#envを連結した\#concat, \#envの音源の途中に\#liveを加算した\#mix, RWC研究者用音楽データベース\ref{RWCpops,RWCjazz}からポピュラー音楽\#pops，ジャズ音楽\#jazz，を用意した．いずれも1チャネル音源とし，フレーム内で量子化振幅値がすべて0となる区間は現れないものとする．
 
 \#live および \#env　は加工されていない信号（ライブ信号）と考える．\#concatおよび\#mixは環境の異なるライブ信号を合成したものである．\#popsはマルチトラックミキシングが行われており，\#jazzは明記されていないが一般に一挙録音されたものと考える．
 
 \begin{figure}
 	\centering
-	\includegraphics[width=0.5\textwidth]{fig/live.pdf}
+	\includegraphics[width=0.5\textwidth]{fig/live.png}
 	\caption{\#live}
 	\label{fig:result_live}
 \end{figure}
 \begin{figure}
 	\centering
-	%\includegraphics[width=0.5\textwidth]{fig/env.pdf}
+	\includegraphics[width=0.5\textwidth]{fig/env.png}
 	\caption{\#enc}
 	\label{fig:result_env}
 \end{figure}
 \begin{figure}
 	\centering
-	%\includegraphics[width=0.5\textwidth]{fig/concat.pdf}
+	\includegraphics[width=0.5\textwidth]{fig/concat.png}
 	\caption{\#concat}
 	\label{fig:result_concat}
 \end{figure}
 \begin{figure}
 	\centering
-	%\includegraphics[width=0.5\textwidth]{fig/mix.pdf}
+	\includegraphics[width=0.5\textwidth]{fig/mix.png}
 	\caption{\#mix}
 	\label{fig:result_mix}
 \end{figure}
 \begin{figure}
 	\centering
-	%\includegraphics[width=0.5\textwidth]{fig/pops.pdf}
+	\includegraphics[width=0.5\textwidth]{fig/pops.png}
 	\caption{\#pops}
 	\label{fig:result_pops}
 \end{figure}
 \begin{figure}
 	\centering
-	%\includegraphics[width=0.5\textwidth]{fig/jazz.pdf}
+	\includegraphics[width=0.5\textwidth]{fig/jazz.png}
 	\caption{\#jazz}
 	\label{fig:result_jazz}
 \end{figure}
@@ -161,8 +162,8 @@ $\mathcal{C}_{\o}(n)$がある閾値$\mathcal{c}_{\o}$を下回るとき，フ�
 
 
 \section{結論}
-本報告では，短ケフレンシー領域のケプストラムを録音環境と考え，信号中で最もパワーの低いフレームで得られる短ケフレンシーケプストラムを実録音環境とした上で，信号中の各フレームでの相互相関係数の変化を計測し，急峻に低下するフレームを非現実的ミックスフレームとした．
-
+本報告では，短ケフレンシー領域のケプストラムを録音環境と考え，信号中で最もパワーの低いフレームで得られる短ケフレンシーケプストラムを実録音環境とした上で，信号中の各フレームでのケプストラム相互相関係数の変化を計測し，急峻に変化するフレームを非現実的ミックスフレームとした．
+生収録が既知である音楽信号，環境騒音に対しては一定の範囲内での変動であるのに対し，ミキシングを行った信号では連結フレーム，または合成フレームにおいて大幅な変動があったことから，ケプストラムの相互相関により音源の背景に存在する音環境の移り変わりを捉えることができる可能性が示唆された．ただし，音源と環境の分離は不十分であり，音源の変化の影響も少なからずあることが考えられる．今後は，その精査と，ASVSpoofで利用されるリプレイアタック検知用評価音源データベースなど信頼できる評価音源に対する評価を行う．
 
 \bibliographystyle{sieicej}
 \bibliography{emm202001}
