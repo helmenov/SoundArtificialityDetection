@@ -44,7 +44,7 @@ Unreal mixing, Spoofing detection, Liveness detection, Cepstrum
 現代の音楽制作現場では，計算機の利用により簡単にデジタル音響加工を行うことが可能となった．商用の楽曲メディアでは，現実に直接録音された音に対して，残響処理や各種エフェクトを施し，さらにそれらを適切な時刻，到来方向に配置するなどを行うのが一般的になっている．また，深層学習の導入により，簡単に人間には現実の音と聞き分けることができない高品質な模擬音を作成し，音源とすることも可能である．このような音源・音場の模擬は，人間による聴取においては問題にならないが，真正性の担保が必要とされるシステムにおいては大きな問題となる可能性がある．一旦パッケージ化された信号についてその真正性を担保するには，真正の配信者が介在し，恣意的に電子透かしを埋め込んだり，フィンガープリントを記憶するなどによりそれらを照合することで解決できるが，パッケージされる前の直接録音されたものである真正性を担保することにはならない．事実，音声による個人認証・照合システム(ASV: Automatic speaker verification)では，このような録音再生音（リプレイ音声）やディープフェイク音声などによる詐称がシステムの判断を誤らせる障害となることが取りざたされている，　
 音声以外でも例えば，工場の異常音を模擬した音が作成され，再生された場合，労働者に誤った判断をさせてしまう．
 
-\begin{figure}[tbh]
+\begin{figure}[tb]
 	\centering
 	\includegraphics[width=0.5\textwidth]{fig/Anti-spoofing.png}
 	\caption{Anti-spoofing: 手元の録音はライブ音かなりすまし加工音か．}
@@ -115,43 +115,43 @@ $\mathcal{C}_{\o}(n)$がある閾値$\mathcal{c}_{\o}$を下回るとき，フ�
 
 \section{評価実験}
 
-評価音源として，新たにスタジオ録音したギター演奏\#live，騒音データベース\ref{souon}から\#env，時間方向に\#liveと\#envを連結した\#concat, \#envの音源の途中に\#liveを加算した\#mix, RWC研究者用音楽データベース\ref{RWCpops,RWCjazz}からポピュラー音楽\#pops，ジャズ音楽\#jazz，を用意した．いずれも1チャネル音源とし，フレーム内で量子化振幅値がすべて0となる区間は現れないものとする．
+評価音源として，新たにスタジオ録音したギター演奏\#live，騒音データベース\cite{souon}から\#env，時間方向に\#liveと\#envを連結した\#concat, \#envの音源の途中に\#liveを加算した\#mix, RWC研究者用音楽データベース\cite{RWCpops,RWCjazz}からポピュラー音楽\#pops，ジャズ音楽\#jazz，を用意した．いずれも1チャネル音源とし，フレーム内で量子化振幅値がすべて0となる区間は現れないものとする．
 
 \#live および \#env　は加工されていない信号（ライブ信号）と考える．\#concatおよび\#mixは環境の異なるライブ信号を合成したものである．\#popsはマルチトラックミキシングが行われており，\#jazzは明記されていないが一般に一挙録音されたものと考える．
 
 \begin{figure}
 	\centering
-	\includegraphics[width=0.5\textwidth]{fig/live.png}
+	\includegraphics[width=0.4\textwidth]{fig/live.png}
 	\caption{\#live}
 	\label{fig:result_live}
 \end{figure}
 \begin{figure}
 	\centering
-	\includegraphics[width=0.5\textwidth]{fig/env.png}
+	\includegraphics[width=0.4\textwidth]{fig/env.png}
 	\caption{\#enc}
 	\label{fig:result_env}
 \end{figure}
 \begin{figure}
 	\centering
-	\includegraphics[width=0.5\textwidth]{fig/concat.png}
+	\includegraphics[width=0.4\textwidth]{fig/concat.png}
 	\caption{\#concat}
 	\label{fig:result_concat}
 \end{figure}
 \begin{figure}
 	\centering
-	\includegraphics[width=0.5\textwidth]{fig/mix.png}
+	\includegraphics[width=0.4\textwidth]{fig/mix.png}
 	\caption{\#mix}
 	\label{fig:result_mix}
 \end{figure}
 \begin{figure}
 	\centering
-	\includegraphics[width=0.5\textwidth]{fig/pops.png}
+	\includegraphics[width=0.4\textwidth]{fig/pops.png}
 	\caption{\#pops}
 	\label{fig:result_pops}
 \end{figure}
 \begin{figure}
 	\centering
-	\includegraphics[width=0.5\textwidth]{fig/jazz.png}
+	\includegraphics[width=0.4\textwidth]{fig/jazz.png}
 	\caption{\#jazz}
 	\label{fig:result_jazz}
 \end{figure}
