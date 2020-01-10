@@ -37,6 +37,7 @@ for i, p in enumerate(wavname, 0):
     ax1.plot(t1,x)
     ax1.grid(which='minor')
     ax1.set_title("Time-series")
+    ax1.set_rasterized('True')
     
     # fig(b) CrossCep_ref
     ax2 = fig.add_subplot(2,1,2)
@@ -45,7 +46,8 @@ for i, p in enumerate(wavname, 0):
     ax2.grid(which='minor')
     ax2.set_title("Cross-Correlation Coefficients")
     ax2.set_xlabel("Time [s]")
-    
+    ax2.set_rasterized('True')
+
     plt.show()
-    fig.savefig(labelname[i]+'.png', bbox_inches="tight", pad_inches=0.05)
+    fig.savefig(labelname[i]+'.pdf', bbox_inches="tight", pad_inches=0.05)
     
