@@ -91,8 +91,8 @@ def liveness_sensor(fname, window_size=1024, frame_size=8192, shift=128):
     Cep_past = np.zeros([int(frame_size),1])
     #Cep = np.zeros([int(frame_size),1],dtype=np.complex)
     CrossCep = np.zeros([n_frame-1])
-    eps = 0.001
-    minPow = 1
+    eps = 1e-10
+    minPow = frame_size
     while i_start + window_size - 1 < len_x - 1:
         x_now = np.zeros([frame_size,x.shape[1]])
         i_frame = int(i_start/shift)
@@ -100,7 +100,7 @@ def liveness_sensor(fname, window_size=1024, frame_size=8192, shift=128):
         i_end = min(i_start + window_size, len_x)
         x_now[0:int(i_end-i_start),:] = window * x[int(i_start):int(i_end),:]
         # Length FFT target should be > window_size*2, latter points are zero-padding 
-        X = scifft.fft(x_now)
+        X = scifft.fft(x_now)/frame_size
         
         # Inter-channel Power Ratio
         Pow = np.real(X * np.conj(X))
@@ -117,7 +117,7 @@ def liveness_sensor(fname, window_size=1024, frame_size=8192, shift=128):
         #IGDD[:,i_frame:i_frame+1] = G_R-G_L
         
         # Inter-frame diff-quefrency pass filter for L 
-        quef = frame_size/4# zankyo jikan 0.9s == 0.9*window_size
+        quef = window_size/2# zankyo jikan 0.9s == 0.9*window_size
         Amp = np.abs(X[:,0])
         #Phs = np.unwrap(np.angle(X[:,0])*2)/2
         #LS = np.zeros([int(frame_size),1],dtype=np.complex)
@@ -132,12 +132,10 @@ def liveness_sensor(fname, window_size=1024, frame_size=8192, shift=128):
         Lifter = np.r_[np.ones(int(quef)),np.zeros(int(frame_size-2*quef)),np.ones(int(quef))]
         #Cep_H = Cep * Cep_min
         Cep_H = Lifter * CepA
-        Cep_H_mean = np.mean(Cep_H)
-        Cep_H = Cep_H - Cep_H_mean
-        if Pow[0,0] < minPow:
-            minPow = Pow[0,0]
+        if sum(Pow[:,0]) < minPow:
+            minPow = sum(Pow[:,0])
             min_frame = i_frame
-            ref_Cep = Cep_H
+            ref_Cep = Cep_H # Cep[0] is unnecessary ?
                     
         if i_frame > 0:
             #diffCep = (Cep_H - Cep_past)/2
@@ -157,6 +155,7 @@ def liveness_sensor(fname, window_size=1024, frame_size=8192, shift=128):
         i_start = i_start + shift
 
     CrossCep_ref = np.zeros([n_frame])
+    Cep_Hs = np.zeros([int(quef),n_frame])
     i_start = 0
     while i_start + window_size - 1 < len_x - 1:
         x_now = np.zeros([frame_size,x.shape[1]])
@@ -165,7 +164,7 @@ def liveness_sensor(fname, window_size=1024, frame_size=8192, shift=128):
         i_end = min(i_start + window_size, len_x)
         x_now[0:int(i_end-i_start),:] = window * x[int(i_start):int(i_end),:]
         # Length FFT target should be window_size*2, latter points are zero-padding 
-        X = scifft.fft(x_now)
+        X = scifft.fft(x_now)/frame_size
                 
         # Inter-frame diff-quefrency pass filter for L 
         quef = window_size/4# zankyo jikan 0.9s == 0.9*window_size
@@ -183,19 +182,18 @@ def liveness_sensor(fname, window_size=1024, frame_size=8192, shift=128):
         Lifter = np.r_[np.ones(int(quef)),np.zeros(int(frame_size-2*quef)),np.ones(int(quef))]
         #Cep_H = Cep[:,0] - Lifter * Cep_min
         Cep_H = Lifter * CepA
-        Cep_H_mean = np.mean(Cep_H) 
-        Cep_H = Cep_H - Cep_H_mean
             
-        XCep = np.correlate(Cep_H[0:int(frame_size/2)], ref_Cep[0:int(frame_size/2)],"full")
-        ACep = np.correlate(Cep_H[0:int(frame_size/2)], Cep_H[0:int(frame_size/2)],"full")
-        ACep_ref = np.correlate(ref_Cep[0:int(frame_size/2)], ref_Cep[0:int(frame_size/2)],"full")
-        XCep = XCep/np.sqrt(ACep * ACep_ref)
+        XCep = np.correlate(Cep_H[1:int(frame_size/2+1)], ref_Cep[1:int(frame_size/2+1)],"full")
+        ACep = np.correlate(Cep_H[1:int(frame_size/2+1)], Cep_H[1:int(frame_size/2+1)],"full")
+        ACep_ref = np.correlate(ref_Cep[1:int(frame_size/2+1)], ref_Cep[1:int(frame_size/2+1)],"full")
+        XCep = (XCep+eps)/(np.sqrt(ACep * ACep_ref)+eps)
         #print(np.nanmax(XCep))
         #CrossCep_ref[i_frame] = np.nanmax(XCep) 
-        CrossCep_ref[i_frame] = XCep[int(frame_size/2)] 
+        CrossCep_ref[i_frame] = XCep[int(frame_size/2)]
+        Cep_Hs[0:int(quef),i_frame] = Cep_H[0:int(quef)]
         i_start = i_start + shift
     
     
-    return (CrossCep,CrossCep_ref,ref_Cep)
+    return (CrossCep,CrossCep_ref,ref_Cep,Cep_Hs,min_frame)
     
         

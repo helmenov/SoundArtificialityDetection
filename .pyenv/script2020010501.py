@@ -20,13 +20,17 @@ shift = 128
 
 labelname = ["live", "env", "concat", "mix", "pops", "jazz"]
 wavname = ["01live.wav", "02eki.wav", "03concat.wav", "04mix.wav", "05pops.wav", "06jazz.wav"]
-
+n_frame = int(np.floor(1764000/shift))
+quef = int(window_size/2)
+Cep_Hs = np.zeros([6,quef,n_frame])
+ref_Cep = np.zeros([6,frame_size]) 
+min_frame = np.zeros([6,])
 for i, p in enumerate(wavname, 0): 
     wavname_path = WavHome+p
     x, fs = sf.read(wavname_path)
     x = x[:,0]
     len_x = len(x)
-    CrossCep, CrossCep_ref, ref_Cep = liveness_sensor.liveness_sensor(wavname_path,window_size,frame_size,shift)
+    CrossCep, CrossCep_ref, ref_Cep[i,:], Cep_Hs[i,:,:], min_frame[i] = liveness_sensor.liveness_sensor(wavname_path,window_size,frame_size,shift)
 
     fig = plt.figure(figsize=(10,10),dpi=60)
     fig.subplots_adjust(hspace=0.5)
