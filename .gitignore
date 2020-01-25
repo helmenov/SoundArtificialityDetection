@@ -3,3 +3,9 @@
 *.synctex.gz
 *.bbl
 *.blg
+.pyenv/.vscode
+.pyenv/__pycache__
+.pyenv/Include
+.pyenv/Lib
+.pyenv/Scripts
+.pyenv/share
