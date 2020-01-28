@@ -92,7 +92,10 @@ def liveness_sensor(fname, window_size=1024, frame_size=8192, shift=128):
     #Cep = np.zeros([int(frame_size),1],dtype=np.complex)
     CrossCep = np.zeros([n_frame-1])
     eps = 1e-10
-    minPow = frame_size
+    wd =15
+    refPow = frame_size
+    quef = window_size/8
+    Cep_Hs = np.zeros([int(quef),n_frame])
     while i_start + window_size - 1 < len_x - 1:
         x_now = np.zeros([frame_size,x.shape[1]])
         i_frame = int(i_start/shift)
@@ -117,7 +120,6 @@ def liveness_sensor(fname, window_size=1024, frame_size=8192, shift=128):
         #IGDD[:,i_frame:i_frame+1] = G_R-G_L
         
         # Inter-frame diff-quefrency pass filter for L 
-        quef = window_size/2# zankyo jikan 0.9s == 0.9*window_size
         Amp = np.abs(X[:,0])
         #Phs = np.unwrap(np.angle(X[:,0])*2)/2
         #LS = np.zeros([int(frame_size),1],dtype=np.complex)
@@ -132,30 +134,33 @@ def liveness_sensor(fname, window_size=1024, frame_size=8192, shift=128):
         Lifter = np.r_[np.ones(int(quef)),np.zeros(int(frame_size-2*quef)),np.ones(int(quef))]
         #Cep_H = Cep * Cep_min
         Cep_H = Lifter * CepA
-        if sum(Pow[:,0]) < minPow:
-            minPow = sum(Pow[:,0])
-            min_frame = i_frame
-            ref_Cep = Cep_H # Cep[0] is unnecessary ?
+        Cep_Hs[0:int(quef),i_frame] = Cep_H[0:int(quef)]
+        if i_frame > wd:
+            if sum(Pow[:,0]) < refPow:
+                refPow = sum(Pow[:,0])
+                ref_frame = i_frame
+                #ref_Cep = Cep_H # Cep[0] is unnecessary ?
                     
         if i_frame > 0:
             #diffCep = (Cep_H - Cep_past)/2
             #diffLS = scifft.fft(diffCep)
             #diffXall = np.exp(diffLS)
             #diffX[:,i_frame-1] = diffXall[0:int(frame_size/2)] 
-            XCep = np.correlate(Cep_H[0:int(frame_size/2)], Cep_past[0:int(frame_size/2)],"full")
-            ACep = np.correlate(Cep_H[0:int(frame_size/2)], Cep_H[0:int(frame_size/2)],"full")
-            ACep_past = np.correlate(Cep_past[0:int(frame_size/2)], Cep_past[0:int(frame_size/2)],"full")
+            XCep = np.correlate(Cep_H[2:int(quef)], Cep_past[2:int(quef)],"full")
+            ACep = np.correlate(Cep_H[2:int(quef)], Cep_H[2:int(quef)],"full")
+            ACep_past = np.correlate(Cep_past[2:int(quef)], Cep_past[2:int(quef)],"full")
             XCep = XCep/np.sqrt(ACep * ACep_past)
             #print(XCep.shape)
             #CrossCep[i_frame-1] = np.nanmax(XCep)
-            CrossCep[i_frame-1] = XCep[int(frame_size/2)]
+            CrossCep[i_frame-1] = XCep[int(quef-2)]
             
         Cep_past = Cep_H
                 
         i_start = i_start + shift
 
+
+    ref_Cep=np.mean(Cep_Hs[:,ref_frame-wd:ref_frame+wd],axis=1)
     CrossCep_ref = np.zeros([n_frame])
-    Cep_Hs = np.zeros([int(quef),n_frame])
     i_start = 0
     while i_start + window_size - 1 < len_x - 1:
         x_now = np.zeros([frame_size,x.shape[1]])
@@ -167,7 +172,6 @@ def liveness_sensor(fname, window_size=1024, frame_size=8192, shift=128):
         X = scifft.fft(x_now)/frame_size
                 
         # Inter-frame diff-quefrency pass filter for L 
-        quef = window_size/4# zankyo jikan 0.9s == 0.9*window_size
         Amp = np.abs(X[:,0])
         #Phs = np.unwrap(np.angle(X[:,0])*2)/2
         #LS = np.zeros([int(frame_size),1],dtype=np.complex)
@@ -183,17 +187,16 @@ def liveness_sensor(fname, window_size=1024, frame_size=8192, shift=128):
         #Cep_H = Cep[:,0] - Lifter * Cep_min
         Cep_H = Lifter * CepA
             
-        XCep = np.correlate(Cep_H[1:int(frame_size/2+1)], ref_Cep[1:int(frame_size/2+1)],"full")
-        ACep = np.correlate(Cep_H[1:int(frame_size/2+1)], Cep_H[1:int(frame_size/2+1)],"full")
-        ACep_ref = np.correlate(ref_Cep[1:int(frame_size/2+1)], ref_Cep[1:int(frame_size/2+1)],"full")
+        XCep = np.correlate(Cep_H[2:int(quef)], ref_Cep[2:int(quef)],"full")
+        ACep = np.correlate(Cep_H[2:int(quef)], Cep_H[2:int(quef)],"full")
+        ACep_ref = np.correlate(ref_Cep[2:int(quef)], ref_Cep[2:int(quef)],"full")
         XCep = (XCep+eps)/(np.sqrt(ACep * ACep_ref)+eps)
         #print(np.nanmax(XCep))
         #CrossCep_ref[i_frame] = np.nanmax(XCep) 
-        CrossCep_ref[i_frame] = XCep[int(frame_size/2)]
-        Cep_Hs[0:int(quef),i_frame] = Cep_H[0:int(quef)]
+        CrossCep_ref[i_frame] = XCep[int(quef-2)]
         i_start = i_start + shift
     
     
-    return (CrossCep,CrossCep_ref,ref_Cep,Cep_Hs,min_frame)
+    return (CrossCep,CrossCep_ref,ref_Cep,Cep_Hs,ref_frame)
     
         
