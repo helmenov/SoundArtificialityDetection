@@ -9,5 +9,8 @@
 .pyenv/Lib
 .pyenv/Scripts
 .pyenv/share
-wavs
-ASV2019Contrib
+*.wav
+*.flac
+\#*
+*~
+#ASV2019Contrib

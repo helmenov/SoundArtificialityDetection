@@ -13,7 +13,7 @@ import numpy as np
 #plt.style.use('kotaro')
 
 #WavHome = "/opt/LivenessEvaluationSoundsDataset/"
-WavHome = "c:/Users/Kotaro/My Repository/SoundArtificialityDetection/wavs/"
+WavHome = "c:/Users/akari/Documents/GitHub/SoundArtificialityDetection/wavs/"
 
 window_size = 8192
 frame_size = 8192

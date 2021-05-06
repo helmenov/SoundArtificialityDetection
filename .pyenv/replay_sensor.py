@@ -24,6 +24,9 @@ def rcunwrap(x):
         y[i] = y[i] - np.pi*nd*i/nh
     return y, nd
 
+
+
+
 def replay_sensor(fname, window_size=1024, frame_size=8192, shift=128):
     # load 2ch-wav file
     x, fs = sf.read(fname)
@@ -41,7 +44,7 @@ def replay_sensor(fname, window_size=1024, frame_size=8192, shift=128):
     n_frame = int(np.floor(len_x/shift))
 
     peak_count = np.zeros([n_frame])
-    eps = 1 #1e-20
+    eps = 1e-20
 
     quef = window_size/64
     Cep_Hs = np.zeros([int(quef),n_frame])
@@ -82,7 +85,7 @@ def replay_sensor(fname, window_size=1024, frame_size=8192, shift=128):
         #Cep_H = Lifter * Cep_MinPhase
         #Cep_H = Lifter * Cep_complex
         #Cep_H = Lifter * Cep_Amplitude
-        Cep_H = Lifter * np.real(Cep_Allpass)
+        Cep_H = Lifter * Cep_Allpass
         
         Cep_Hs[0:int(quef),i_frame] = Cep_H[0:int(quef)]
         peak_count[i_frame] = len(signal.argrelmax(Cep_H[0:int(quef)],order=5)[0]) 
