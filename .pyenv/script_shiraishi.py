@@ -1,5 +1,4 @@
 #!/usr/bin/env python3
-#%%
 # -*- coding: utf-8 -*-
 """
 Created on Sun Jan  5 19:44:00 2020
@@ -15,7 +14,7 @@ import numpy as np
 
 #WavHome = "/opt/LivenessEvaluationSoundsDataset/"
 #WavHome = "c:/Users/akari/Documents/PA/PA/ASVspoof2019_PA_dev/flac1/"
-WavHome = "Audacity3/"
+WavHome = "c:/Users/akari/Documents/Audacity/Audacity3/"
 
 window_size = 8192
 frame_size = 8192
@@ -25,10 +24,9 @@ shift = int(window_size/2)
 labelname = ["","","",""]
 #wavname = ["0001.flac","5401.flac","5603.flac","5805.flac"]
 #wavname = ["0011.flac","5422.flac","5624.flac","5826.flac"]
-wavname = ["0051.wav","5502.flac","5704.flac","5906.flac"]
+wavname = ["0051.flac","5502.flac","5704.flac","5906.flac"]
 #wavname = ["PA_D_0000001.flac","PA_D_0005401.flac","PA_D_0005603.flac","PA_D_0005805.flac"]
 
-#%%
 for i, p in enumerate(wavname, 0): 
     wavname_path = WavHome+p
     x, fs = sf.read(wavname_path)
