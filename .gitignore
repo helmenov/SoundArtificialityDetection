@@ -13,4 +13,6 @@
 *.flac
 \#*
 *~
+~*
+.DS_Store
 #ASV2019Contrib
