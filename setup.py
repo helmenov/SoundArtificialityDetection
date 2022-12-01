@@ -5,7 +5,7 @@ packages = \
 ['soundartificialitydetection']
 
 package_data = \
-{'': ['*'], 'soundartificialitydetection': ['ASVspoof2019Contrib/*']}
+{'': ['*']}
 
 install_requires = \
 ['SoundFile>=0.10.3,<0.11.0',
@@ -18,7 +18,7 @@ install_requires = \
 
 setup_kwargs = {
     'name': 'soundartificialitydetection',
-    'version': '0.2.0',
+    'version': '0.2.1',
     'description': '',
     'long_description': 'None',
     'author': 'Kotaro SONODA',
