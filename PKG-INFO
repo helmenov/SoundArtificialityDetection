@@ -1,6 +1,6 @@
 Metadata-Version: 2.1
 Name: soundartificialitydetection
-Version: 0.2.2
+Version: 0.2.3
 Summary: 
 Author: Kotaro SONODA
 Author-email: kotaro1976@gmail.com
@@ -16,56 +16,58 @@ Requires-Dist: pandas (>=1.5.2,<2.0.0)
 Requires-Dist: scipy (>=1.8.0,<2.0.0)
 Description-Content-Type: text/markdown
 
----
-jupyter: python3
----
+# Sound Artificiality Detection
+
+なりすまし音の人工性を検出するプロジェクト
+
+## package
+
+- ASVspoof2019protocol.py
+	- ASVspoof challenge 2019のプロトコルを扱うためのモジュール
+	- 現在は，PA(Phisical Attack,物理的攻撃,録音再生音)のCM(Counnter Measure)プロトコルのみ対応．後段の認証撹乱のプロトコルは対象にしていない．
+	- LA(Logical Attack,論理的攻撃,人工合成音)は手を付けていない．
+
+### ASVspoof2019protocol.PA_CM クラス
+
+### ASVspoof2019protocol.PA_CM_Audio クラス
+
+
+## install 
+
+インストールは，
+
+> python -m pip install git+https://github.com/helmenov/SoundArtificialityDetection.git
+
+## 使い方
+
+[ASV2019protocolの使い方](SAD_protocol.ipynb)
 
 ```{python}
-import pandas as pd
-from importlib import resources
-import numpy as np
-import os
 from SoundArtificialityDetection.ASV2019protocol import PA_CM, PA_CM_Audio
-```
 
-# Phisical Attack, Counter Measure 
+# 別途，[ASVspoof2019 on Edinburgh DataShare](https://datashare.ed.ac.uk/handle/10283/3336) から，PA.zipをダウンロードし，
+# 例えば，`data`に解答したとする．`./data/PA/...`という状況で，
 
+# プロトコルのデータリストの読み込み
+train = PA_CM(datadir = './data', protocol='train')
 
-## protocolごとのデータリストの読み込み
+# 条件による音響信号クラス(PA_CM_Audioオブジェクト)のリストを獲得
+sndlist = train.query_byIDname(key_name='spoof', attack_name='CC', environment_name='aaa')
 
-```{python}
-#datadir = os.path.join("/Volumes","labo_share5","04_研究資料", "18_SoundSpoof", "ASVspoof2019","PA")
-datadir = os.path.join("../datadir")
+# 獲得したリスト内のPA_CM_Audioオブジェクトの情報を表示
+sndlist[1].show()
 
-train = PA_CM(datadir=datadir,protocol='train')
-eval = PA_CM(datadir=datadir,protocol='eval')
-dev = PA_CM(datadir=datadir,protocol='dev')
-```
+# ふつうにPA_CM_Audioオブジェクトを作る
+snd1 = PA_CM_Audio(train, speaker_name='PA_0079', environment_name='aaa', attack_name='CC', key_name='spoof')
 
-## 条件によるファイルリスト獲得
-
-```{python}
-a = train.query_byIDname(key_name='spoof',attack_name='CC',environment_name='ccc') # 条件にあてはまるファイル(PA_CM_Audio形式)をNDArrayに出力
-a[1].show() 
-```
-
-## 音響信号ファイルの読み込み
-
-```{python}
-# ID nameによる音響信号ファイルのPA_CM_Audio objectの作成
-snd = PA_CM_Audio(train, speaker_name = 'PA_0079', environment_name = 'aaa', attack_name = 'CC', key_name = 'spoof')
-
-# 音響信号ファイルの名前によるPA_CM_Audio objectの作成
+# 音響信号ファイル名でも作れる．
 snd2 = PA_CM_Audio(train, sfile='PA_T_0007085')
 
-# 実際に音響信号ファイルを読み込むときは，readメソッド．self.xにデータが入る．
-snd2.read()
-```
-
-## PA_CM_Audio objectの情報を表示
-
-```{python}
+# 情報表示
 snd2.show()
-```
 
+# 実際に音響信号データを読み込むとき. snd.xでデータを参照できる．
+snd1.read()
+
+```
 
