@@ -1,21 +1,3 @@
-Metadata-Version: 2.1
-Name: soundartificialitydetection
-Version: 0.2.2
-Summary: 
-Author: Kotaro SONODA
-Author-email: kotaro1976@gmail.com
-Requires-Python: >=3.10,<3.11
-Classifier: Programming Language :: Python :: 3
-Classifier: Programming Language :: Python :: 3.10
-Requires-Dist: SoundFile (>=0.10.3,<0.11.0)
-Requires-Dist: japanize-matplotlib (>=1.1.3,<2.0.0)
-Requires-Dist: librosa (>=0.9.2,<0.10.0)
-Requires-Dist: matplotlib (>=3.5.1,<4.0.0)
-Requires-Dist: numpy (>=1.22.3,<2.0.0)
-Requires-Dist: pandas (>=1.5.2,<2.0.0)
-Requires-Dist: scipy (>=1.8.0,<2.0.0)
-Description-Content-Type: text/markdown
-
 ---
 jupyter: python3
 ---
@@ -67,5 +49,4 @@ snd2.read()
 ```{python}
 snd2.show()
 ```
-
 

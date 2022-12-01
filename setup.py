@@ -18,9 +18,9 @@ install_requires = \
 
 setup_kwargs = {
     'name': 'soundartificialitydetection',
-    'version': '0.2.1',
+    'version': '0.2.2',
     'description': '',
-    'long_description': 'None',
+    'long_description': '---\njupyter: python3\n---\n\n```{python}\nimport pandas as pd\nfrom importlib import resources\nimport numpy as np\nimport os\nfrom SoundArtificialityDetection.ASV2019protocol import PA_CM, PA_CM_Audio\n```\n\n# Phisical Attack, Counter Measure \n\n\n## protocolごとのデータリストの読み込み\n\n```{python}\n#datadir = os.path.join("/Volumes","labo_share5","04_研究資料", "18_SoundSpoof", "ASVspoof2019","PA")\ndatadir = os.path.join("../datadir")\n\ntrain = PA_CM(datadir=datadir,protocol=\'train\')\neval = PA_CM(datadir=datadir,protocol=\'eval\')\ndev = PA_CM(datadir=datadir,protocol=\'dev\')\n```\n\n## 条件によるファイルリスト獲得\n\n```{python}\na = train.query_byIDname(key_name=\'spoof\',attack_name=\'CC\',environment_name=\'ccc\') # 条件にあてはまるファイル(PA_CM_Audio形式)をNDArrayに出力\na[1].show() \n```\n\n## 音響信号ファイルの読み込み\n\n```{python}\n# ID nameによる音響信号ファイルのPA_CM_Audio objectの作成\nsnd = PA_CM_Audio(train, speaker_name = \'PA_0079\', environment_name = \'aaa\', attack_name = \'CC\', key_name = \'spoof\')\n\n# 音響信号ファイルの名前によるPA_CM_Audio objectの作成\nsnd2 = PA_CM_Audio(train, sfile=\'PA_T_0007085\')\n\n# 実際に音響信号ファイルを読み込むときは，readメソッド．self.xにデータが入る．\nsnd2.read()\n```\n\n## PA_CM_Audio objectの情報を表示\n\n```{python}\nsnd2.show()\n```\n\n',
     'author': 'Kotaro SONODA',
     'author_email': 'kotaro1976@gmail.com',
     'maintainer': 'None',
