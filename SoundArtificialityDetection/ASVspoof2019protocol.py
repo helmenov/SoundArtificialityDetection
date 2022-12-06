@@ -103,7 +103,6 @@ class PA_CM:
                 cond &= (table[i] == q)
         ans = list()
         for sfile in self.BASE_names[cond]:
-            print(f'{sfile=}=>')
             ans.append(PA_CM_Audio(protocol=self,sfile=sfile))
         return np.array(ans)
 
@@ -141,7 +140,6 @@ class PA_CM_Audio:
                 sfile = sfiles[i]
         else:
             raise ValueError('You must define all of speaker_name, environment_name, attack_name and key_name')
-        print(f'=>{sfile=}')
 
         path = os.path.join(protocol.BASE_dir ,  sfile+".flac")
         #assert os.path.exist(path)

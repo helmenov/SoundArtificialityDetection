@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "soundartificialitydetection"
-version = "0.2.4"
+version = "0.2.5"
 description = ""
 authors = ["Kotaro SONODA <kotaro1976@gmail.com>"]
 readme = "README.md"
