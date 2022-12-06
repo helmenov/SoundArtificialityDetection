@@ -79,6 +79,8 @@ class PA_CM:
             if q is not None:
                 qq = np.where(names[i]==q)[0]
                 qid.update({table[i] : qq})
+
+        print(f'{queries=},{qid=}')
         return self.query_byIDnumber(**qid)
 
     def query_byIDnumber(self, speaker:int=None, environment:int=None, attack:int=None, key:int=None):
@@ -97,10 +99,11 @@ class PA_CM:
         table = np.array([self.SPEAKER, self.ENVIRONMENT, self.ATTACK, self.KEY])
         cond = True
         for i, q in enumerate(queries):
-            if q != None:
+            if q is not None:
                 cond &= (table[i] == q)
         ans = list()
         for sfile in self.BASE_names[cond]:
+            print(f'{sfile=}=>')
             ans.append(PA_CM_Audio(protocol=self,sfile=sfile))
         return np.array(ans)
 
@@ -130,9 +133,15 @@ class PA_CM_Audio:
             environment = np.where(protocol.ENVIRONMENT_names == environment_name)[0]
             attack = np.where(protocol.ATTACK_names == attack_name)[0]
             key = np.where(protocol.KEY_names == key_name)[0]
+            sfiles = protocol.BASE_names[(protocol.SPEAKER == speaker) & (protocol.ENVIRONMENT == environment) & (protocol.ATTACK == attack) & (protocol.KEY == key)]
+            if len(sfiles) > 0:
+                for i,f in enumerate(sfiles):
+                    print(f"{i}:{f}")
+                i = int(input(f'which one?[0--{i}]'))
+                sfile = sfiles[i]
         else:
             raise ValueError('You must define all of speaker_name, environment_name, attack_name and key_name')
-        sfile = protocol.BASE_names[(protocol.SPEAKER == speaker) & (protocol.ENVIRONMENT == environment) & (protocol.ATTACK == attack) & (protocol.KEY == key)][0]
+        print(f'=>{sfile=}')
 
         path = os.path.join(protocol.BASE_dir ,  sfile+".flac")
         #assert os.path.exist(path)
