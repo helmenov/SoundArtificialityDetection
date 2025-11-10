@@ -14,24 +14,33 @@
 ### ASVspoof2019protocol.PA_CM_Audio クラス
 
 
-## install 
+## install
 
 インストールは，
 
 > python -m pip install git+https://github.com/helmenov/SoundArtificialityDetection.git
 
+ちなみに，`soundfile` パッケージが必要だが，これは `libsndfile` という C言語ライブラリに依存しており，別途インストールが必要である．
+
+- また，venv 環境では，`.venv/lib/pythonX.X/site-packages/_soundfile_data/` に，`libsndfile.dylib` が必要である．（インストールした `libsndfile` に同包されているものをコピーしてくればよい．）
+
 ## 使い方
 
 [ASV2019protocolの使い方](SAD_protocol.ipynb)
 
+### データセットのセットアップ
+
+利用する python の `SoundArtificialityDetection` パッケージの置いてあるフォルダの直下の `_data` フォルダに，ASVspoof2019の`PA.zip` の中身を展開して，`_data/ASVspoof2019_PA_asv_protocols/` などというフォルダができるようにする．
+
+`set_data()` メソッドが用意されており，これを実行すると，自動的にダウンロード・展開してくれる．（データセットが巨大なため，30時間ほどかかります．）
+
+### セットアップ後の使い方
+
 ```{python}
 from SoundArtificialityDetection.ASV2019protocol import PA_CM, PA_CM_Audio
 
-# 別途，[ASVspoof2019 on Edinburgh DataShare](https://datashare.ed.ac.uk/handle/10283/3336) から，PA.zipをダウンロードし，
-# 例えば，`data`に解答したとする．`./data/PA/...`という状況で，
-
 # プロトコルのデータリストの読み込み
-train = PA_CM(datadir = './data', protocol='train')
+train = PA_CM(protocol='train')
 
 # 条件による音響信号クラス(PA_CM_Audioオブジェクト)のリストを獲得
 sndlist = train.query_byIDname(key_name='spoof', attack_name='CC', environment_name='aaa')
@@ -52,3 +61,9 @@ snd2.show()
 snd1.read()
 
 ```
+
+# build-system
+
+このプロジェクトは uv の uv_build を使ってビルドしています．
+
+パッチビルドは，`uv version --bump patch` コマンドでバージョンをインクリメントしたのち，`uv build` コマンドでビルドします．
