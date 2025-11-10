@@ -13,5 +13,10 @@ dependencies = [
 authors = [
     {"name"="Kotaro SONODA", "email"="kotaro1976@gmail.com"}
 ]
+
+[dependency-groups]
+dev = [
+    "ipykernel>=7.1.0",
+]
 #include = ["SAD_protocol.ipynb"]
 

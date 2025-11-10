@@ -1,0 +1,8 @@
+README.md
+pyproject.toml
+src/SoundArtificialityDetection/ASVspoof2019protocol.py
+src/soundartificialitydetection.egg-info/PKG-INFO
+src/soundartificialitydetection.egg-info/SOURCES.txt
+src/soundartificialitydetection.egg-info/dependency_links.txt
+src/soundartificialitydetection.egg-info/requires.txt
+src/soundartificialitydetection.egg-info/top_level.txt

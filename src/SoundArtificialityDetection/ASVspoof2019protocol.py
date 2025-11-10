@@ -5,7 +5,7 @@ import librosa
 from audioread.ffdec import FFmpegAudioFile as ar
 from soundfile import SoundFile as sf
 
-def set_data(path_to_zipfile):
+def set_data(path_to_zipfile = 'https://datashare.ed.ac.uk/bitstream/handle/10283/3336/PA.zip?sequence=4&isAllowed=y'):
     """set PA files in _data
 
     You can download PA.zip from [ASVspoof2019 on Edinburgh DataShare](https://datashare.ed.ac.uk/handle/10283/3336)
