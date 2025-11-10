@@ -1,11 +1,22 @@
 import os
+from shlex import join
+from urllib import request
 import pandas as pd
 import numpy as np
 import librosa
 from audioread.ffdec import FFmpegAudioFile as ar
+import requests
 from soundfile import SoundFile as sf
+import zipfile
+from tqdm import tqdm
+import shutil
 
-def set_data(path_to_zipfile = 'https://datashare.ed.ac.uk/bitstream/handle/10283/3336/PA.zip?sequence=4&isAllowed=y'):
+BUNDLE_URL = 'https://datashare.ed.ac.uk/bitstream/handle/10283/3336/PA.zip?sequence=4&isAllowed=y'
+DATA_DIR = os.path.join(os.path.dirname(os.path.abspath(__file__)), "_data")
+DOWNLOAD_DIR = os.path.join(os.path.dirname(os.path.abspath(__file__)), "_download")
+
+def set_data():
+
     """set PA files in _data
 
     You can download PA.zip from [ASVspoof2019 on Edinburgh DataShare](https://datashare.ed.ac.uk/handle/10283/3336)
@@ -14,22 +25,40 @@ def set_data(path_to_zipfile = 'https://datashare.ed.ac.uk/bitstream/handle/1028
         path_to_zipfile (str): path to the downloaded zip-file 'PA.zip'.
 
     """
-    data_dir = os.path('_data')
+
+    bundle_url = BUNDLE_URL
+    data_dir = DATA_DIR
+    donwload_dir = DOWNLOAD_DIR
 
     if os.path.exists(data_dir) == False:
-        os.mkdir(data_dir)
+        os.mkdir(download_dir)
+    file_size = int(requests.head(bundle_url).headers["Content-Length"])
 
-        # extract
-        with zipfile.ZipFile(path_to_zipfile) as existing_zip:
-            existing_zip.extractall(data_dir)
-        #os.remove('path_to_zipfile')
+    res = requests.get(bundle_url, stream=True)
+    pbar = tqdm(total=file_size, unit='B', unit_scale=True, desc='Downloading PA.zip')
+    with open(
+        os.path.join(download_dir, 'PA.zip'), 'wb'
+        ) as file:
+            for chunk in res.iter_content(chunk_size=1024):
+                if chunk:
+                    file.write(chunk)
+                    pbar.update(len(chunk))
+
+
+    # extract
+    with zipfile.ZipFile(
+        os.path.join(download_dir, "PA.zip")) as existing_zip:
+            existing_zip.extractall(download_dir)
+    os.remove(os.path.join(download_dir, 'PA.zip'))
+    shutil.move(src=os.path.join(download_dir,'PA'), dst=data_dir)
+    shutil.rmtree(download_dir)
 
 #######################################
 # Physical Attack, Counter Measure
 #######################################
 class PA_CM:
     _columns = ['SPEAKER_ID','AUDIO_FILE_NAME','ENVIRONMENT_ID','ATTACK_ID','KEY']
-    def __init__(self, datadir:str='_data', protocol:str='train')->None:
+    def __init__(self, datadir:str=DATA_DIR, protocol:str='train')->None:
         """class PA_CM constructor
 
         Args:

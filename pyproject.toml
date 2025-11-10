@@ -1,14 +1,16 @@
 [project]
-name = "soundartificialitydetection"
+name = "SoundArtificialityDetection"
 version = "0.2.6"
 description = ""
 readme = "README.md"
 requires-python = ">=3.13"
 dependencies = [
     "audioread>=3.0.1",
+    "librosa>=0.11.0",
     "numpy>=2.1.3",
     "pandas>=2.2.3",
     "soundfile>=0.12.1",
+    "tqdm>=4.67.1",
 ]
 authors = [
     {"name"="Kotaro SONODA", "email"="kotaro1976@gmail.com"}
@@ -20,3 +22,9 @@ dev = [
 ]
 #include = ["SAD_protocol.ipynb"]
 
+[build-system]
+requires = ["uv_build"]
+build-backend = "uv_build"
+
+[tool.uv.build-backend]
+module-name = "SoundArtificialityDetection"
