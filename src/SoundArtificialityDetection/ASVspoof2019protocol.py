@@ -28,7 +28,7 @@ def set_data():
 
     bundle_url = BUNDLE_URL
     data_dir = DATA_DIR
-    donwload_dir = DOWNLOAD_DIR
+    download_dir = DOWNLOAD_DIR
 
     if os.path.exists(data_dir) == False:
         os.mkdir(download_dir)

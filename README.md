@@ -61,9 +61,3 @@ snd2.show()
 snd1.read()
 
 ```
-
-# build-system
-
-このプロジェクトは uv の uv_build を使ってビルドしています．
-
-パッチビルドは，`uv version --bump patch` コマンドでバージョンをインクリメントしたのち，`uv build` コマンドでビルドします．
