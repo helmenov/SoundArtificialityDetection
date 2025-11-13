@@ -1,6 +1,6 @@
 [project]
 name = "SoundArtificialityDetection"
-version = "0.2.9"
+version = "0.2.10"
 description = ""
 readme = "README.md"
 requires-python = ">=3.13"
