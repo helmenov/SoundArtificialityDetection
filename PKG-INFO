@@ -1,6 +1,6 @@
 Metadata-Version: 2.3
 Name: SoundArtificialityDetection
-Version: 0.2.7
+Version: 0.2.9
 Summary: 
 Author: Kotaro SONODA
 Author-email: Kotaro SONODA <kotaro1976@gmail.com>
@@ -76,3 +76,9 @@ snd2.show()
 snd1.read()
 
 ```
+
+# build-system
+
+このプロジェクトは uv の uv_build を使ってビルドしています．
+
+パッチビルドは，`uv version --bump patch` コマンドでバージョンをインクリメントしたのち，`uv build` コマンドでビルドします．

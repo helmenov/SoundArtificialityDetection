@@ -192,12 +192,12 @@ class PA_CM_Audio:
             try:
                 x, fs = librosa.load(ar(self.path))
             except Exception as e:
-                print(f'Unexpected error {e}')
+                sys.exit(f'audioread: Unexpected error {e}: {ar(self.path)}, {self.path}')
             else:
                 lenx = len(x)
                 chx = x.ndim
         except Exception as e:
-            print(f'Unexpected error {e}')
+            sys.exit(f'soundfile: Unexpected error {e}: {sf(self.path)}, {self.path}')
         else:
             lenx = len(x)
             chx = x.ndim
