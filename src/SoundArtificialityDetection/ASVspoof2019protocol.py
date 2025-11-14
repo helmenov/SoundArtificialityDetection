@@ -187,21 +187,29 @@ class PA_CM_Audio:
         lenx = 0
         chx = 0
         try:
-            x, fs = librosa.load(sf(self.path))
-        except RuntimeError as e:
-            print(f'libsndfile echoes "{e}". then use audioread')
+            sfo = sf(self.path)
+        except Exception as e:
+            sys.exit(f'soundfile: Unexpected error {e}: {self.path}')
+        else:
             try:
-                x, fs = librosa.load(ar(self.path))
+                x, fs = librosa.load(sfo)
             except Exception as e:
-                sys.exit(f'audioread: Unexpected error {e}: {ar(self.path)}, {self.path}')
+                print(f'libsndfile echoes "{e}": {sfo}, then use audioread')
+                try:
+                    aro = ar(self.path)
+                except Exception as e:
+                    sys.exit(f'audioread: Unexpected error {e}: {self.path}')
+                else:
+                    try:
+                        x, fs = librosa.load(aro)
+                    except Exception as e:
+                        sys.exit(f'audioread: Unexpected error {e}: {aro}')
+                    else:
+                        lenx = len(x)
+                        chx = x.ndim
             else:
                 lenx = len(x)
                 chx = x.ndim
-        except Exception as e:
-            sys.exit(f'soundfile: Unexpected error {e}: {sf(self.path)}, {self.path}')
-        else:
-            lenx = len(x)
-            chx = x.ndim
         self.x, self.fs, self.lenx, self.chx = x, fs, lenx, chx
         self.info.update(fs=self.fs, lenx=self.lenx, chx=self.chx)
 
